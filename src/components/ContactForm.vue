@@ -64,6 +64,15 @@
             >
                 Xóa
             </button>
+            <button
+                v-if="!contactLocal._id"
+                type="button"
+                class=" btn btn-primary"
+                @click="addContact"
+            >
+                <i class="fas fa-save"></i>
+                <span> Lưu</span>
+            </button>
         </div>
     </Form>
 </template>
@@ -114,6 +123,9 @@ export default {
         },
         deleteContact() {
             this.$emit("delete:contact", this.contactLocal.id);
+        },
+        addContact() {
+            this.$emit("add:contact", this.contactLocal);
         },
     },
 };

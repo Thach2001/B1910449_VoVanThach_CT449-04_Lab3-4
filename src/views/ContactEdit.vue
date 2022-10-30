@@ -1,10 +1,12 @@
 <template>
     <div v-if="contact" class="page">
-        <h4 v-if="contact.id">Hiệu chỉnh Liên hệ</h4>
+        <h4 v-if="contact._id">Hiệu chỉnh Liên hệ</h4>
+        <h4 v-if="!contact._id">Thêm Liên hệ</h4>
         <ContactForm
             :contact="contact"
             @submit:contact="updateContact"
             @delete:contact="deleteContact"
+            @add:contact="addContact"
         />
         <p>{{ message }}</p>
     </div>
@@ -65,11 +67,35 @@ export default {
                 }
             }
         },
+
+        async addContact(data) {
+            try {
+                if (data.name ===  '' || data.email ===  '' || 
+                data.address ===  '' || data.phone ===  '' || 
+                data.favorite ===  false) {
+                    alert('Bạn phải nhập hết tất cả các trường');
+                }
+                await ContactService.create( data);
+                this.message = "Thêm mới liên hệ thành công.";
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
     
     created() {
-        this.getContact(this.id);
-        this.message = "";
+        if (this.id) {
+            this.getContact(this.id);
+            this.message = "";
+        } else if (!this.id) {
+            this.contact = {
+                name : '',
+                email : '',
+                phone : '',
+                address : '',
+                favorite : false
+            }
+        }
     },
 };
 </script>
